@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+
+    php:
+        build: ./php
+        container_name: php
+        volumes:
+            - ./app:/var/www/html
+        links:
+            - mysql
+
+    nginx:
+        build: ./nginx
+        container_name: nginx
+        volumes:
+            - ./app:/var/www/html
+            - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - 8180:80
+            - 8188:443
+        links:
+            - php
+
+    # Mysql
+    mysql:
+        image: mysql:5.7
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        container_name: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=php_study_project
+        ports:
+            - 8066:3306
+        volumes:
+            - ./mysql:/var/lib/mysql

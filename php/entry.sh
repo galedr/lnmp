@@ -1,0 +1,1 @@
+crond && docker-php-entrypoint php-fpm
